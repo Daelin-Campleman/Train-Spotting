@@ -1,1 +1,3 @@
-# Train-Spotting
+# Train Spotting Game
+
+![Train Spotting](./frontend/public/TrainSpottingLogo.png)
