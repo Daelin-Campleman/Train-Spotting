@@ -8,6 +8,6 @@ git pull;
 cd frontend;
 
 sudo docker build -t frontend .;
-sudo docker run -d -p 80:8080 --name TrainSpotting-Frontend --restart unless-stopped -tld frontend;
+sudo docker run -d -p 443:8080 --name TrainSpotting-Frontend --restart unless-stopped -tld frontend;
 
 cd ../../;
