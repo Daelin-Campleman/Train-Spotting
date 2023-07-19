@@ -12,7 +12,7 @@ sudo docker run -d --net host --name TrainSpotting-Frontend --restart unless-sto
 
 cd ../backend;
 
-mvn clean package;
+/opt/apache-maven-3.9.3/bin/mvn clean package;
 
 sudo docker build -t backend .;
 sudo docker run -d --net host --name TrainSpotting-Backend --restart unless-stopped -tld backend;
