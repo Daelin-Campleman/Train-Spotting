@@ -27,7 +27,10 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-
-              # Now we have got the access of EC2 and we will start the deploy .
-              touch success.txt
+              sudo docker stop TrainSpotting-Frontend &&
+              sudo docker rm TrainSpotting-Frontend &&
+              git pull &&
+              cd frontend &&
+              sudo docker build -t frontend . &&
+              sudo docker run -d -p 8080:8080 --name TrainSpotting-Frontend --restart unless-stopped -tld frontend
               '
