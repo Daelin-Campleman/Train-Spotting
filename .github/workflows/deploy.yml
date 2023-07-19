@@ -29,6 +29,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
               sudo docker stop TrainSpotting-Frontend &&
               sudo docker rm TrainSpotting-Frontend &&
+              ch Train-Spotting &&
               git pull &&
               cd frontend &&
               sudo docker build -t frontend . &&
