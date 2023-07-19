@@ -3,7 +3,7 @@ sudo docker rm TrainSpotting-Frontend;
 sudo docker stop TrainSpotting-Backend;
 sudo docker rm TrainSpotting-Backend;
 
-git pull;
+sudo git pull;
 
 cd frontend;
 
