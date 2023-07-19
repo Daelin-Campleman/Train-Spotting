@@ -14,10 +14,10 @@ on:
 jobs:
   Deploy:
     name: Deploy to EC2
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu 20.04
     
     steps:
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v3
       - name: Build & Deploy
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
