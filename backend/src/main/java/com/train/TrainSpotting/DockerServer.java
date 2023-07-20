@@ -1,4 +1,4 @@
-package com.baeldung.spring.cloud.config.docker;
+package com.train.TrainSpotting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
