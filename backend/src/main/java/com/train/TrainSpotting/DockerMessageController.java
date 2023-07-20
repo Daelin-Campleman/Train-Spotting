@@ -9,4 +9,9 @@ public class DockerMessageController {
     public String getMessage() {
         return "Hello from Docker!";
     }
+
+    @GetMapping("/error")
+    public String getMessage() {
+        return "Error: Invalid end-point";
+    }
 }
