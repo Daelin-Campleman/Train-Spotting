@@ -6,8 +6,8 @@
 
 | Environment | Server | URL |
 |-----|-----|-----|
-| Production | Front-End | [https://train-spotting.co.za](https://train-spotting.co.za) (secure) |
-|  |  | [http://train-spotting.co.za](http://train-spotting.co.za) (insecure) |
+| Production | Front-End | [https://www.train-spotting.co.za](https://www.train-spotting.co.za) (secure) |
+|  |  | [http://www.train-spotting.co.za](http://www.train-spotting.co.za) (insecure) |
 |  | Back-End | [https://train-spotting.co.za:444](https://train-spotting.co.za:444) (secure) |
 |  |  | [http://train-spotting.co.za:81](http://train-spotting.co.za:81) (insecure) |
 |  |  |  |
