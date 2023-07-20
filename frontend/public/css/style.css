@@ -45,7 +45,7 @@ html.dark {
     top: 0;
     left: 0;
 
-    background-image: url("../images/background-nosky.png");
+    background-image: url("../images/background-nosky-dark-small.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -55,7 +55,7 @@ html.dark {
 }
 
 .dark .background {
-    background-image: url("../images/background-nosky-dark.png");
+    background-image: url("../images/background-nosky-dark-small.png");
 }
 
 body {
