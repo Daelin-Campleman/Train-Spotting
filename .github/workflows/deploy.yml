@@ -35,7 +35,7 @@ jobs:
               sudo git pull &&
               cd frontend &&
               sudo docker build -t frontend . &&
-              sudo docker run -d --net host --name TrainSpotting-Frontend --restart unless-stopped -tld frontend; &&
+              sudo docker run -d --net host --name TrainSpotting-Frontend --restart unless-stopped -tld frontend &&
               cd ../backend &&
               /opt/apache-maven-3.9.3/bin/mvn clean package &&
               sudo docker build -t backend . &&
