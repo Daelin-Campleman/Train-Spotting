@@ -1,9 +1,28 @@
+<img src="./frontend/public/TrainSpottingLogo.png" alt="" width="100">
+
 # Train Spotting Game
 
+## Endpoints
 
+| Environment | Server | URL |
+|-----|-----|-----|
+| Production | Front-End | [https://train-spotting.co.za](https://train-spotting.co.za) (secure) |
+|  |  | [http://train-spotting.co.za](http://train-spotting.co.za) (insecure) |
+|  | Back-End | [https://train-spotting.co.za:444](https://train-spotting.co.za:444) (secure) |
+|  |  | [http://train-spotting.co.za:81](http://train-spotting.co.za:81) (insecure) |
+|  |  |  |
+| localhost | Front-End | [http://localhost:8080](http://localhost:8080) (insecure) |
+|  | Back-End | [http://localhost:8181](http://localhost:8181) (insecure) |
 
-Frontend: [http://localhost:8080](http://localhost:8080) or [https://train-spotting.co.za](https://train-spotting.co.za)
+Sample backend end-point
+[https://train-spotting.co.za:444/messages](https://train-spotting.co.za:444/messages)
 
-Backend: [http://localhost:8181](http://localhost:8181) or [https://train-spotting.co.za:444](https://train-spotting.co.za:444) (E.g. [https://train-spotting.co.za:444/messages](https://train-spotting.co.za:444/messages))
+## Running locally
 
-![Train Spotting](./frontend/public/TrainSpottingLogo.png)
+Inside the `frontend` folder, run `node index.js`
+
+Inside the `backend` folder, run:
+1. `mvn clean package`
+2. `java -jar target/TrainSpotting-0.0.1-SNAPSHOT.jar`
+
+Open your browser to [http://localhost:8080](http://localhost:8080)
