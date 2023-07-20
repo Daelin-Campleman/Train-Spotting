@@ -28,5 +28,16 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
               cd Train-Spotting &&
-              sudo sh deploy.sh
+              sudo docker stop TrainSpotting-Frontend &&
+              sudo docker rm TrainSpotting-Frontend &&
+              sudo docker stop TrainSpotting-Backend &&
+              sudo docker rm TrainSpotting-Backend &&
+              sudo git pull &&
+              cd frontend &&
+              sudo docker build -t frontend . &&
+              sudo docker run -d --net host --name TrainSpotting-Frontend --restart unless-stopped -tld frontend; &&
+              cd ../backend &&
+              /opt/apache-maven-3.9.3/bin/mvn clean package &&
+              sudo docker build -t backend . &&
+              sudo docker run -d --net host --name TrainSpotting-Backend --restart unless-stopped -tld backend
               '
