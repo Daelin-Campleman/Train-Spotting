@@ -17,9 +17,36 @@
     <meta name="msapplication-TileColor" content="#f6c3ac">
     <meta name="theme-color" content="#f6c3ac">
     <!-- Icons -->
+
+    <script src="https://kit.fontawesome.com/5138b10c49.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <div id="background-wrap">
+        <div class="x1">
+            <div class="cloud"></div>
+        </div>
+    
+        <div class="x2">
+            <div class="cloud"></div>
+        </div>
+    
+        <div class="x3">
+            <div class="cloud"></div>
+        </div>
+    
+        <div class="x4">
+            <div class="cloud"></div>
+        </div>
+    
+        <div class="x5">
+            <div class="cloud"></div>
+        </div>
+    </div>
+    <div class="background"></div>
+
+    <button id="theme"><i class="fa-solid fa-moon"></i></button>
+    
     <header>
         <img src="TrainSpottingLogo.png" width="300">
     </header>
@@ -37,6 +64,19 @@
     <footer>
         <p>Copyright &copy 2023 Train Spotting</p>
     </footer>
+
+    <script>
+        document.getElementById("theme").addEventListener("click", function(e){
+            if(e.currentTarget.innerHTML == `<i class="fa-solid fa-moon"></i>`){
+                e.currentTarget.innerHTML = `<i class="fa-solid fa-sun"></i>`;
+
+                document.getElementsByTagName("html")[0].classList.add("dark");
+            } else {
+                e.currentTarget.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+                document.getElementsByTagName("html")[0].classList.remove("dark");
+            }
+        });
+    </script>
 </body>
 
 </html>
