@@ -19,10 +19,17 @@ Sample backend end-point
 
 ## Running locally
 
-Inside the `frontend` folder, run `node index.js`
+Inside the `frontend` folder, run:
+
+```bash
+node index.js
+```
 
 Inside the `backend` folder, run:
-1. `mvn clean package`
-2. `java -jar target/TrainSpotting-0.0.1-SNAPSHOT.jar`
+
+```bash
+mvn clean package
+java -jar target/TrainSpotting-0.0.1-SNAPSHOT.jar
+```
 
 Open your browser to [http://localhost:8080](http://localhost:8080)
