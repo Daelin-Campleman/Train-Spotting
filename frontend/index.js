@@ -90,6 +90,8 @@ const landingRouter = require("./routes/landing");
 app.engine('html', require('ejs').renderFile);
 app.set("views", path.join(__dirname, "views"));
 app.use("/static", express.static("./public"));
+app.use("/game", userRouter);
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
