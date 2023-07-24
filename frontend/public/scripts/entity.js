@@ -7,7 +7,7 @@ class Entity {
 
     constructor(element) {
         this.element = element
-        this.speed = getRandomValue(0.1, 0.6)
+        this.speed = getRandomValue(0.1, 0.3)
     }
 
     hide() {
@@ -35,7 +35,7 @@ class Entity {
     reset() {
         this.element.style.left = (-this.element.clientWidth)+"px"
     }
-
+// need to make this do it in lanes?
     setY(y) {
         this.element.style.top = y+"px"
     }
@@ -52,5 +52,9 @@ class Entity {
 
     #getRandomValue(min, max) {
         return (Math.random() * (max - min)) + min
+    }
+
+    getRandomDirection() {
+        return 
     }
 }

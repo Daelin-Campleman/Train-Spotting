@@ -1,3 +1,4 @@
+// needs to be replaced with login
 exports.getLogin = (_, res) => {
     res.render("Login/login.html");
   };

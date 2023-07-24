@@ -5,12 +5,14 @@ let entities
 setupEntities()
 
 const highScoreDisplay = document.getElementById("highScore");
-const userLives = document.getElementById("userLives");
+const userLivesDisplay = document.getElementById("userLives");
+const userLives = document.getElementById("scoreBox");
 const decreaseButton = document.getElementById("decreaseButton");
 
-decreaseButton.addEventListener("click", decreaseScore);
+// decreaseButton.addEventListener("click", decreaseScore);
 
 let score = 0;
+let lives = 5;
 
 function increaseScore() {
     score++;
@@ -22,6 +24,17 @@ function decreaseScore() {
     highScoreDisplay.innerText = "Highscore: " + score;
 }
 
+function increaseLives() {
+    lives++;
+    userLivesDisplay.innerText = "Lives: " + lives;
+}
+
+function decreaseLives() {
+    lives = lives - 1
+    loseLife()
+    userLivesDisplay.innerText = "Lives: " + lives;
+}
+
 function onTrainClicked() {
     increaseScore()
     twain.hide()
@@ -31,7 +44,6 @@ function onTrainClicked() {
 }
 
 function onTrainExpired() {
-    decreaseScore()
     twain.hide()
     twain.reset()
     twain.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
@@ -39,7 +51,8 @@ function onTrainExpired() {
 }
 
 function onDecoyClicked(decoy) {
-    decreaseScore()
+    console.log("window.innerHeight"+window.innerHeight)
+    decreaseLives()
     decoy.hide()
     decoy.reset()
     decoy.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
@@ -47,7 +60,6 @@ function onDecoyClicked(decoy) {
 }
 
 function onDecoyExpired(decoy) {
-    increaseScore()
     decoy.hide()
     decoy.reset()
     decoy.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
@@ -88,7 +100,7 @@ function createDecoyEntity() {
     })
     return entity
 }
-
+// needs to be done multiple times
 function showNextEntity() {
     entities[Math.floor(getRandomValue(0, entities.length))].show()
 }
@@ -96,3 +108,24 @@ function showNextEntity() {
 function getRandomValue(min, max) {
     return (Math.random() * (max - min)) + min
 }
+
+let remainingLives = lives;
+
+function updateHearts() {
+    console.log("updating hearts")
+    console.log("lives: " + lives)
+    console.log("remainingLives: " + remainingLives)
+    for (let i = 1; i <= lives; i++) {
+      const heart = document.getElementById(`heart${i}`);
+      if (i <= remainingLives) {
+        heart.style.visibility = 'visible';
+      } else {
+        heart.style.visibility = 'hidden';
+      }
+    }
+  }
+
+  function loseLife() {
+    remainingLives--;
+    updateHearts();
+  }

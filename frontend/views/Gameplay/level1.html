@@ -16,20 +16,27 @@
             <a href="#about">About</a>
         </nav>
     </header>
-    <h1 id="highScore">Highscore:</h1>
-    <!-- <button id="increaseButton">
-      <img class="" src="/static/images/level1Train.png" />
-    </button> -->
-    <button id="decreaseButton">
-        <img class="" src="/static/images/level1Truck1.png" />
-    </button>
-    <h1 id="userLives">Lives:</h1>
+    <aside id="scoreBox">
+        <h1 id="highScore">Highscore: 0</h1>
+        <h1 id="userLives">Lives: 5</h1>
+        <div class="scoreboard">
+            <!-- Initially, display 5 hearts -->
+            <div class="heart" id="heart1"></div>
+            <div class="heart" id="heart2"></div>
+            <div class="heart" id="heart3"></div>
+            <div class="heart" id="heart4"></div>
+            <div class="heart" id="heart5"></div>
+        </div>
+    </aside>
 
-    <!-- <canvas id="gameCanvas" width="800" height="500" style="border:1px solid #000000;">
-    </canvas> -->
-    <button id="increaseButton" style="position: absolute;">
-        <img id="trainToAnimate" src="/static/images/level1Train.png" />
-    </button>
+    <!-- <button id="decreaseButton">
+        <img class="" src="/static/images/level1Truck1.png" />
+    </button> -->
+    <section class="gameArea">
+        <button id="increaseButton" style="position: absolute;">
+            <img id="trainToAnimate" src="/static/images/level1Train.png" />
+        </button>
+    </section>
 
     <style>
         html,
@@ -50,6 +57,22 @@
             margin: 0;
             outline: none;
             cursor: pointer;
+        }
+
+        aside {
+            float: right;
+            width: 30%;
+            /* margin: 20px; */
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .heart {
+            width: 30px;
+            height: 30px;
+            background-image: url('/static/images/heartIcon.png');
+            background-size: cover;
+            display: inline-block;
         }
     </style>
     <script src="/static/scripts/entity.js"></script>
