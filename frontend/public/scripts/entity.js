@@ -4,10 +4,12 @@ class Entity {
     speed = 0.1
     isHidden = false
     onExpire = {}
+    type
 
-    constructor(element) {
+    constructor(element, type) {
         this.element = element
-        this.speed = getRandomValue(0.1, 0.3)
+        this.speed = this.#getRandomValue(0.1, 0.3)
+        this.type = type
     }
 
     hide() {
@@ -28,13 +30,14 @@ class Entity {
         this.element.style.left = (this.element.offsetLeft+this.speed*progress)+"px"
 
         if (this.element.offsetLeft > window.innerWidth) {
-            this.onExpire()
+            this.onExpire(this)
         }
     }
 
     reset() {
         this.element.style.left = (-this.element.clientWidth)+"px"
     }
+    
 // need to make this do it in lanes?
     setY(y) {
         this.element.style.top = y+"px"
@@ -42,7 +45,7 @@ class Entity {
 
     setOnClickListener(doOnClick) {
         this.element.addEventListener("click", ()=>{
-            doOnClick()
+            doOnClick(this)
         });
     }
 
@@ -57,4 +60,10 @@ class Entity {
     getRandomDirection() {
         return 
     }
+
+    levelUpTrain() {
+        console.log("att" + this.element.getAttribute('src'))
+        this.element.setAttribute('src', '/static/images/level2Train.png')
+    }
+
 }
