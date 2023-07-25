@@ -2,7 +2,7 @@ class Entity {
 
     element
     speed = 0.1
-    isHidden = false
+    isHidden = true
     onExpire = {}
     type
 
@@ -62,8 +62,11 @@ class Entity {
     }
 
     levelUpTrain() {
-        console.log("att" + this.element.getAttribute('src'))
-        this.element.setAttribute('src', '/static/images/level2Train.png')
+        this.element.getElementsByTagName("img").item(0).setAttribute('src', '/static/images/level2Train.png')
+    }
+
+    levelDownTrain() {
+        this.element.getElementsByTagName("img").item(0).setAttribute('src', '/static/images/level1Train.png')
     }
 
 }

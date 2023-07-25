@@ -1,4 +1,3 @@
-let twain
 let entities 
 
 const highScoreDisplay = document.getElementById("highScore");
@@ -55,6 +54,7 @@ function onEntityClicked(entity){
     } else {
         decreaseLives()
     }
+    // levelUpGameLogic()
     resetEntity(entity)
 }
 
@@ -66,15 +66,17 @@ function resetEntity(entity) {
     showNextEntity(entity)
 }
 
+function deleteEntity(entity){
+    entity.hide()
+}
+
 function setupEntities() {
-    twain = new Entity(document.getElementById('increaseButton'), 'train')
-    twain.setY(setLaneY())
-    twain.setOnClickListener(onEntityClicked);
-    twain.setOnExpiredListener(resetEntity)
     entities = [
-        twain,
         createTrainEntity(),
-        createTrainEntity()
+        createTrainEntity(),
+        createDecoyEntity(),
+        createDecoyEntity(),
+        createDecoyEntity()
     ]
 }
 
@@ -104,7 +106,8 @@ function createTrainElement() {
     newButton.setAttribute('class', 'train')
     newButton.style.position = 'absolute'
     const img = document.createElement('img')
-    img.setAttribute('src', '/static/images/level2Train.png')
+    img.setAttribute('src', '/static/images/level1Train.png')
+    img.setAttribute('class', 'img')
     newButton.appendChild(img)
     return newButton
 }
@@ -118,6 +121,19 @@ function createTrainEntity() {
     entity.setOnClickListener(onEntityClicked)
     entity.setOnExpiredListener(resetEntity)
     return entity
+}
+
+function levelUpGameLogic() {
+    for (let i = 0; i < entities.length; i++){
+        entities[i].hide()
+        entities.shift()
+    }
+    entities = [
+        createTrainEntity(),
+        createTrainEntity(),
+        createTrainEntity(),
+        createTrainEntity()
+    ]
 }
 
 const showNextEntity = async () => {
@@ -157,8 +173,7 @@ function updateHearts() {
 }
 
 function powerUpEnabled(entity) {
-    const trainElement = document.getElementById('trainToAnimate');
-    entity.levelUpTrain(trainElement)
+    entity.levelUpTrain()
 }
 
 function disablePowerUp() {
