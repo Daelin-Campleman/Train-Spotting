@@ -1,60 +1,37 @@
-let entities 
+const vehicleArray = []
 
 const highScoreDisplay = document.getElementById("highScore");
 const userLivesDisplay = document.getElementById("userLives");
 const scoreBox = document.getElementById("scoreBox");
 
-setupEntities()
+const trainFactory = new TrainFactory()
+const truckFactory = new TruckFactory()
+
+setupEntities(trainFactory, 5)
+setupEntities(truckFactory, 5)
 
 let score = 0;
 let lives = 5;
 let gameLevel = 0
 
-const trainPoints = 1
-const decoyPoints = -1
-const powerupTrainPoints = 2
-const powerupDecoyPoints = 2
-
-let powerUp1 = false
-
-function increaseScore() {
-    // if (powerUp1 = true) {
-    //     score =+ powerupTrainPoints
-    // } else {
-    //     score =+ trainPoints
-    // }
-    score++
+function updateScore() {
     highScoreDisplay.innerText = "Highscore: " + score;
-}
 
-function decreaseScore() {
-    score--;
-    highScoreDisplay.innerText = "Highscore: " + score;
-}
-
-function increaseLives() {
-    lives++;
-    userLivesDisplay.innerText = "Lives: " + lives;
-}
-
-function decreaseLives() {
-    lives = lives - 1
-    userLivesDisplay.innerText = "Lives: " + lives;
-}
-
-function increaseGameLEvel() {
-    if(score >= 10 ) {
-        gameLevel++
+    if(score >= 3) {
+        levelUpGameLogic()
     }
+}
+
+function updateLives() {
+    userLivesDisplay.innerText = "Lives: " + lives;
+    updateHearts()
 }
 
 function onEntityClicked(entity){
-    if(entity.type === 'train'){
-        increaseScore()
-    } else {
-        decreaseLives()
-    }
-    // levelUpGameLogic()
+    score = entity.modifyScoreOnClick(score)
+    lives = entity.modifyLivesOnClick(lives)
+    updateScore()
+    updateLives()
     resetEntity(entity)
 }
 
@@ -62,120 +39,40 @@ function resetEntity(entity) {
     entity.hide()
     entity.reset()
     entity.setY(setLaneY())
-    powerUpEnabled(entity)
-    showNextEntity(entity)
 }
 
-function deleteEntity(entity){
-    entity.hide()
-}
-
-function setupEntities() {
-    entities = [
-        createTrainEntity(),
-        createTrainEntity(),
-        createDecoyEntity(),
-        createDecoyEntity(),
-        createDecoyEntity()
-    ]
-}
-
-function createDecoyElement() {
-    const newButton = document.createElement('button')
-    newButton.setAttribute('class', 'decoy')
-    newButton.style.position = 'absolute'
-    const img = document.createElement('img')
-    img.setAttribute('src', '/static/images/level1Truck1.png')
-    newButton.appendChild(img)
-    return newButton
-}
-
-function createDecoyEntity() {
-    const decoy = createDecoyElement()
-    document.body.appendChild(decoy)
-    decoy.style.display = 'none'
-    const entity = new Entity(decoy, 'decoy')
-    entity.setY(setLaneY())
-    entity.setOnClickListener(onEntityClicked)
-    entity.setOnExpiredListener(resetEntity)
-    return entity
-}
-
-function createTrainElement() {
-    const newButton = document.createElement('button')
-    newButton.setAttribute('class', 'train')
-    newButton.style.position = 'absolute'
-    const img = document.createElement('img')
-    img.setAttribute('src', '/static/images/level1Train.png')
-    img.setAttribute('class', 'img')
-    newButton.appendChild(img)
-    return newButton
-}
-
-function createTrainEntity() {
-    const train = createTrainElement()
-    document.body.appendChild(train)
-    train.style.display = 'none'
-    const entity = new Entity(train, 'train')
-    entity.setY(setLaneY())
-    entity.setOnClickListener(onEntityClicked)
-    entity.setOnExpiredListener(resetEntity)
-    return entity
-}
-
-function levelUpGameLogic() {
-    for (let i = 0; i < entities.length; i++){
-        entities[i].hide()
-        entities.shift()
+function setupEntities(factory, numVehicles) {
+    for (let i = 0; i < numVehicles; i++){
+        vehicleArray.push(factory.createVehicle(onEntityClicked, resetEntity))
     }
-    entities = [
-        createTrainEntity(),
-        createTrainEntity(),
-        createTrainEntity(),
-        createTrainEntity()
-    ]
+}
+
+// TODO: Replace with Broadcaster pattern
+function levelUpGameLogic() {
+    for (let i = 0; i < vehicleArray.length; i++){
+        vehicleArray[i].levelUp()
+    }
 }
 
 const showNextEntity = async () => {
-    entities[Math.floor(getRandomValue(0, entities.length))].show()
-    await setTimeout('', 2000)
-    entities[Math.floor(getRandomValue(0, entities.length))].show()
+    vehicleArray[Math.floor(getRandomValue(0, vehicleArray.length))].show()
 }
 
 function getRandomValue(min, max) {
     return (Math.random() * (max - min)) + min
 }
 
-// not currently used
-function setRandomY(){
-    const scoreBoxValue = (scoreBox.offsetTop + scoreBox.clientHeight)
-    return (getRandomValue(scoreBoxValue, window.innerHeight))
-}
-
 function setLaneY(){
     const scoreBoxValue = (scoreBox.offsetTop + scoreBox.clientHeight)
-    x =  (window.innerHeight - scoreBoxValue - 60)
-    numberOfLanes = Math.floor(x/100)
-    randomLane = Math.floor(Math.random() * numberOfLanes)
-    result = (randomLane / numberOfLanes * x) + (scoreBoxValue)
-    return result
+    const x =  (window.innerHeight - scoreBoxValue - 60)
+    const numberOfLanes = Math.floor(x/100)
+    const randomLane = Math.floor(Math.random() * numberOfLanes)
+    return (randomLane / numberOfLanes * x) + (scoreBoxValue)
 }
 
 function updateHearts() {
-    for (let i = 1; i <= lives; i++) {
-      const heart = document.getElementById(`heart${i}`);
-      if (i <= lives) {
-        heart.style.visibility = 'visible';
-      } else {
+    if(lives >= 0 && lives < 5) {
+        const heart = document.getElementById(`heart${lives+1}`);
         heart.style.visibility = 'hidden';
-      }
     }
-}
-
-function powerUpEnabled(entity) {
-    entity.levelUpTrain()
-}
-
-function disablePowerUp() {
-    // replace with old images
 }

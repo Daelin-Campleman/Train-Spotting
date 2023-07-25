@@ -1,15 +1,13 @@
-class Entity {
+class AbstractVehicle {
 
     element
     speed = 0.1
     isHidden = true
     onExpire = {}
-    type
 
-    constructor(element, type) {
+    constructor(element) {
         this.element = element
         this.speed = this.#getRandomValue(0.1, 0.3)
-        this.type = type
     }
 
     hide() {
@@ -61,12 +59,20 @@ class Entity {
         return 
     }
 
-    levelUpTrain() {
-        this.element.getElementsByTagName("img").item(0).setAttribute('src', '/static/images/level2Train.png')
+    levelUp(){
+        throw "Abstract method called. Should not be called lol"
+    } 
+
+    levelDown(){
+        throw "Abstract method called. Should not be called lol"
     }
 
-    levelDownTrain() {
-        this.element.getElementsByTagName("img").item(0).setAttribute('src', '/static/images/level1Train.png')
+    modifyScoreOnClick(score){
+        throw "Abstract method called. Should not be called lol"
+    }
+
+    modifyLivesOnClick(lives){
+        throw "Abstract method called. Should not be called lol"
     }
 
 }
