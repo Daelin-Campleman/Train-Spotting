@@ -16,7 +16,7 @@ public class UserRepository {
     private final String createUserQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
     private final String getUserByUsernameQuery = "SELECT * FROM users WHERE username=?";
     private final String updateScoreQuery = "UPDATE users SET score=? WHERE username=?";
-    private final String getAllScoresByUsernameQuery = "SELECT score FROM scores WHERE username=?";
+    private final String getAllScoresByUsernameQuery = "SELECT * FROM scores WHERE username=?";
 
     private Properties properties;
 
@@ -76,37 +76,40 @@ public class UserRepository {
                 if (resultSet.next()) {
                     String email = resultSet.getString("email");
                     String password = resultSet.getString("password");
-                    int score = resultSet.getInt("score");
 
                     user = new User(username, email, password);
-                    user.setScore(fetchUserScores(connection, username));
+                    fetchUserScores(connection, user); 
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve user information. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
         return user;
     }
 
-    private List<Integer> fetchUserScores(Connection connection, String username) {
+    
+    
+    private void fetchUserScores(Connection connection, User user) {
         List<Integer> scores = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByUsernameQuery)) {
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, user.getUsername());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     int score = resultSet.getInt("score");
-                    scores.add(score);
+                    user.addScore(score);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return scores;
     }
+    
+    
 
 
 
@@ -114,29 +117,26 @@ public class UserRepository {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null.");
         }
-
         if (!isValidUsername(user.getUsername())) {
             throw new IllegalArgumentException("Invalid username.");
         }
-
         if (!isValidEmail(user.getEmail())) {
             throw new IllegalArgumentException("Invalid email format.");
         }
-
         if (!isValidPassword(user.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
     }
 
+
+
     private boolean isValidUsername(String username) {
         return username != null && !username.isEmpty();
     }
-
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email != null && Pattern.matches(emailRegex, email);
     }
-
     private boolean isValidPassword(String password) {
         return password != null && password.length() >= 8;
     }
@@ -151,7 +151,6 @@ public class UserRepository {
             preparedStatement.setString(2, username);
 
             int affectedRows = preparedStatement.executeUpdate();
-
             if (affectedRows == 0) {
                 throw new SQLException("Updating score failed, no rows affected.");
             }
