@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 const path = require("path");
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 // express session
 app.use(
@@ -33,7 +33,7 @@ const isLoggedIn = (req, res, next) => {
 
 // Base route
 app.get("/", (req, res) => {
-  res.redirect("/login");
+  res.sendFile(path.join(__dirname, "public/login/login.html"));
 });
 
 app.get("/login", (req, res) => {
