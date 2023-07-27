@@ -2,10 +2,8 @@ package crud.train;
 
 import javax.swing.JOptionPane;
 import java.sql.*;
-import java.util.regex.Pattern;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -13,10 +11,12 @@ import java.util.Properties;
 
 public class UserRepository {
 
-    private final String createUserQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-    private final String getUserByUsernameQuery = "SELECT * FROM users WHERE username=?";
-    private final String updateScoreQuery = "UPDATE users SET score=? WHERE username=?";
-    private final String getAllScoresByUsernameQuery = "SELECT * FROM scores WHERE username=?";
+    private final String createUserQuery = "INSERT INTO Users (UserName,Email) VALUES (?,?)";
+    private final String getUserByEmailQuery = "SELECT * FROM Users WHERE Email=?";
+    private final String updateScoreQuery = "INSERT INTO Leaderboard (Email,Score,Timestamp VALUES (?,?,?)"; 
+    private final String getAllScoresByEmailQuery = "SELECT * FROM Leaderboard WHERE Email=?";
+
+    private String errorCode = "Error";
 
     private Properties properties;
 
@@ -36,19 +36,19 @@ public class UserRepository {
 
     private Connection getConnection() throws SQLException {
         String url = properties.getProperty("db.url");
-        String username = properties.getProperty("db.username");
-        String password = properties.getProperty("db.password");
-        return DriverManager.getConnection(url, username, password);
+
+        return DriverManager.getConnection(url);
     }
-    public User createUser(User user) {
-        validateUser(user);
 
+
+//------------------------------------------------------------------------------------------------------------------------
+
+
+    public void createUser(String email) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(createUserQuery, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(createUserQuery)) {
 
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(1, email);
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -58,44 +58,46 @@ public class UserRepository {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to create user. Please try again!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to create user. Please try again!", errorCode, JOptionPane.ERROR_MESSAGE);
         }
-
-        return user;
     }
 
-    public User getUserByUsername(String username) {
+
+    
+
+//------------------------------------------------------------------------------------------------------------------------
+
+    public User getUserByEmail(String email) {
         User user = null;
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(getUserByUsernameQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(getUserByEmailQuery)) {
 
-            preparedStatement.setString(1, username);
+            preparedStatement.setString(1, email);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String email = resultSet.getString("email");
-                    String password = resultSet.getString("password");
-
-                    user = new User(username, email, password);
+                    user = new User(email);
                     fetchUserScores(connection, user); 
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores!", errorCode, JOptionPane.ERROR_MESSAGE);
         }
 
         return user;
     }
 
-    
-    
-    private void fetchUserScores(Connection connection, User user) {
-        List<Integer> scores = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByUsernameQuery)) {
-            preparedStatement.setString(1, user.getUsername());
+
+    // fetch all scores using the user object's email created from above
+    
+    private List fetchUserScores(Connection connection, User user) {
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByEmailQuery)) {
+           
+            preparedStatement.setString(1, user.getEmail());
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -105,50 +107,26 @@ public class UserRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores", errorCode, JOptionPane.ERROR_MESSAGE);
         }
-    }
-    
-    
 
-
-
-    private void validateUser(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null.");
-        }
-        if (!isValidUsername(user.getUsername())) {
-            throw new IllegalArgumentException("Invalid username.");
-        }
-        if (!isValidEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Invalid email format.");
-        }
-        if (!isValidPassword(user.getPassword())) {
-            throw new IllegalArgumentException("Invalid password.");
-        }
+        return user.getScores();
     }
 
 
 
-    private boolean isValidUsername(String username) {
-        return username != null && !username.isEmpty();
-    }
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-        return email != null && Pattern.matches(emailRegex, email);
-    }
-    private boolean isValidPassword(String password) {
-        return password != null && password.length() >= 8;
-    }
+    //------------------------------------------------------------------------------------------------------------------------
 
 
-
-    public void updateScore(String username, int newScore) {
+    public void updateScore(String email, int newScore) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateScoreQuery)) {
 
-            preparedStatement.setInt(1, newScore);
-            preparedStatement.setString(2, username);
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, newScore);
+
+            final Timestamp currentTMStamp = new Timestamp(System.currentTimeMillis());
+            preparedStatement.setTimestamp(3, currentTMStamp);
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -160,6 +138,4 @@ public class UserRepository {
             JOptionPane.showMessageDialog(null, "Failed to update user score. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
 }
