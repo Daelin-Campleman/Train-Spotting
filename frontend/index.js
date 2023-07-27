@@ -70,6 +70,10 @@ app.get("/home", isLoggedIn, (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+app.get("/scores", isLoggedIn, (req, res) => {
+  res.sendFile(path.join(__dirname, "public/highScores.html"));
+});
+
 // Route that logs out the authenticated user
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
