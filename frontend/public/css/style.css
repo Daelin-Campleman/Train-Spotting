@@ -171,6 +171,16 @@ a.btn:hover {
   box-shadow: 0 0 10px rgb(39, 247, 39);
 }
 
+.btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 1em;
+
+  margin-top: 1em;
+}
+
 footer {
   text-align: center;
   color: white;
