@@ -12,7 +12,6 @@ import java.util.Properties;
 public class UserRepository {
 
     private final String createUserQuery = "INSERT INTO Users (UserName,Email) VALUES (?,?)";
-    private final String getUserByEmailQuery = "SELECT * FROM Users WHERE Email=?";
     private final String updateScoreQuery = "INSERT INTO Leaderboard (Email,Score,Timestamp VALUES (?,?,?)"; 
     private final String getAllScoresByEmailQuery = "SELECT * FROM Leaderboard WHERE Email=?";
 
@@ -67,35 +66,16 @@ public class UserRepository {
 
 //------------------------------------------------------------------------------------------------------------------------
 
-    public User getUserByEmail(String email) {
+    public List<Integer> getUserByEmail(String email) {
         User user = null;
-
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(getUserByEmailQuery)) {
-
-            preparedStatement.setString(1, email);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    user = new User(email);
-                    fetchUserScores(connection, user); 
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to retrieve user scores!", errorCode, JOptionPane.ERROR_MESSAGE);
-        }
-
-        return user;
+        user = new User(email);
+        return fetchUserScores( user); 
     }
 
-
-
-    // fetch all scores using the user object's email created from above
-    
-    private List fetchUserScores(Connection connection, User user) {
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByEmailQuery)) {
+    // fetch all user scores using the user object's email created from above 
+    private List<Integer> fetchUserScores( User user) {
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByEmailQuery)) {
            
             preparedStatement.setString(1, user.getEmail());
 
@@ -109,7 +89,6 @@ public class UserRepository {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to retrieve user scores", errorCode, JOptionPane.ERROR_MESSAGE);
         }
-
         return user.getScores();
     }
 
@@ -135,7 +114,7 @@ public class UserRepository {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to update user score. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to update user score. Please try again later.", errorCode, JOptionPane.ERROR_MESSAGE);
         }
     }
 }
