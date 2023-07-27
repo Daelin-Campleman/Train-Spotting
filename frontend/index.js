@@ -27,7 +27,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 };
 
@@ -36,9 +36,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/login/login.html"));
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/login/login.html"));
-});
+// app.get("/login", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public/login/login.html"));
+// });
 
 // Google Auth consent screen route
 app.get(
@@ -70,6 +70,10 @@ app.get("/home", isLoggedIn, (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+app.get("/scores", isLoggedIn, (req, res) => {
+  res.sendFile(path.join(__dirname, "public/highScores.html"));
+});
+
 // Route that logs out the authenticated user
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -82,6 +86,22 @@ app.get("/logout", (req, res) => {
       });
     }
   });
+});
+
+app.get("/userInfo", isLoggedIn, (req, res) => {
+  let obj = {
+    status: "success",
+    name: req.user.displayName,
+    email: req.user.email,
+    image: req.user.picture
+  }
+  
+  res.json(obj);
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
 });
 
 const userRouter = require("./routes/user");
