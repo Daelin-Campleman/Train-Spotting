@@ -1,17 +1,17 @@
-package crud.train;
+package com.train.TrainSpotting;
 
 import javax.swing.JOptionPane;
 import java.sql.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 
 
 public class UserRepository {
 
-    private final String createUserQuery = "INSERT INTO Users (UserName,Email) VALUES (?,?)";
+    private final String createUserQuery = "INSERT INTO Users (Email) VALUES (?)";
     private final String updateScoreQuery = "INSERT INTO Leaderboard (Email,Score,Timestamp VALUES (?,?,?)"; 
     private final String getAllScoresByEmailQuery = "SELECT * FROM Leaderboard WHERE Email=?";
 
@@ -66,14 +66,11 @@ public class UserRepository {
 
 //------------------------------------------------------------------------------------------------------------------------
 
-    public List<Integer> getUserByEmail(String email) {
-        User user = null;
-        user = new User(email);
-        return fetchUserScores( user); 
+    public Map<Integer, Timestamp> getUserScoresByEmail(String email) {
+        return fetchUserScores( new User(email)); 
     }
-
     // fetch all user scores using the user object's email created from above 
-    private List<Integer> fetchUserScores( User user) {
+    private Map<Integer, Timestamp> fetchUserScores( User user) {
         try (Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(getAllScoresByEmailQuery)) {
            
@@ -82,14 +79,14 @@ public class UserRepository {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     int score = resultSet.getInt("score");
-                    user.addScore(score);
+                    Timestamp scoreDate = resultSet.getTimestamp("Timestamp");
+                    user.addScoresWithTimestamp(score, scoreDate);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to retrieve user scores", errorCode, JOptionPane.ERROR_MESSAGE);
         }
-        return user.getScores();
+        return user.getScoresWithTimestamps();
     }
 
 
@@ -109,12 +106,11 @@ public class UserRepository {
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Updating score failed, no rows affected.");
+                throw new SQLException("Updating score failed.!");
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to update user score. Please try again later.", errorCode, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Failed to update user score.!", errorCode, JOptionPane.ERROR_MESSAGE);
         }
     }
 }
