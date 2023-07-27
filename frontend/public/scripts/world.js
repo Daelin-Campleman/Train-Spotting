@@ -1,98 +1,94 @@
-
-let twain
-let entities 
-
-setupEntities()
+const vehicleArray = []
 
 const highScoreDisplay = document.getElementById("highScore");
-const userLives = document.getElementById("userLives");
-const decreaseButton = document.getElementById("decreaseButton");
+const userLivesDisplay = document.getElementById("userLives");
+const scoreBox = document.getElementById("scoreBox");
 
-decreaseButton.addEventListener("click", decreaseScore);
+const trainFactory = new TrainFactory()
+const truckFactory = new TruckFactory()
+
+setupEntities(trainFactory, 5)
+setupEntities(truckFactory, 5)
 
 let score = 0;
+let lives = 5;
+let gameLevel = 0
 
-function increaseScore() {
-    score++;
+function updateScore() {
     highScoreDisplay.innerText = "Highscore: " + score;
+
+    if(score >= 3) {
+        levelUpGameLogic()
+    }
+    if(score >= 7) {
+        levelDownGameLogic()
+    }
 }
 
-function decreaseScore() {
-    score--;
-    highScoreDisplay.innerText = "Highscore: " + score;
+function updateLives() {
+    userLivesDisplay.innerText = "Lives: " + lives;
+    updateHearts()
+
 }
 
-function onTrainClicked() {
-    increaseScore()
-    twain.hide()
-    twain.reset()
-    twain.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
-    showNextEntity()
+function onEntityClicked(entity){
+    score = entity.modifyScoreOnClick(score)
+    lives = entity.modifyLivesOnClick(lives)
+    updateScore()
+    updateLives()
+    resetEntity(entity)
 }
 
-function onTrainExpired() {
-    decreaseScore()
-    twain.hide()
-    twain.reset()
-    twain.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
-    showNextEntity()
+function resetEntity(entity) {
+    entity.hide()
+    entity.reset()
+    entity.setY(setLaneY())
 }
 
-function onDecoyClicked(decoy) {
-    decreaseScore()
-    decoy.hide()
-    decoy.reset()
-    decoy.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
-    showNextEntity()
+function setupEntities(factory, numVehicles) {
+    for (let i = 0; i < numVehicles; i++){
+        vehicleArray.push(factory.createVehicle(onEntityClicked, resetEntity))
+    }
 }
 
-function onDecoyExpired(decoy) {
-    increaseScore()
-    decoy.hide()
-    decoy.reset()
-    decoy.setY(getRandomValue(userLives.offsetTop, window.innerHeight))
-    showNextEntity()
+// TODO: Replace with Broadcaster pattern
+function levelUpGameLogic() {
+    for (let i = 0; i < vehicleArray.length; i++){
+        vehicleArray[i].levelUp()
+    }
 }
 
-function setupEntities() {
-    twain = new Entity(document.getElementById('increaseButton'))
-    twain.setOnClickListener(onTrainClicked);
-    twain.setOnExpiredListener(onTrainExpired)
-    entities = [
-        twain,
-        createDecoyEntity(),
-        createDecoyEntity()
-    ]
+function levelDownGameLogic() {
+    for (let i = 0; i < vehicleArray.length; i++){
+        vehicleArray[i].levelDown()
+    }
 }
 
-function createDecoyElement() {
-    const newButton = document.createElement('button')
-    newButton.setAttribute('class', 'decoy')
-    newButton.style.position = 'absolute'
-    const img = document.createElement('img')
-    img.setAttribute('src', '/static/images/level1Truck1.png')
-    newButton.appendChild(img)
-    return newButton
-}
-
-function createDecoyEntity() {
-    const decoy = createDecoyElement()
-    document.body.appendChild(decoy)
-    decoy.style.display = 'none'
-    const entity = new Entity(decoy)
-    entity.setOnClickListener(() => {
-        onDecoyClicked(entity)
-    })
-    entity.setOnExpiredListener(()=> {
-        onDecoyExpired(entity)
-    })
-    return entity
-}
-
-function showNextEntity() {
-    entities[Math.floor(getRandomValue(0, entities.length))].show()
+const showNextEntity = async () => {
+    vehicleArray[Math.floor(getRandomValue(0, vehicleArray.length))].show()
 }
 
 function getRandomValue(min, max) {
     return (Math.random() * (max - min)) + min
+}
+
+function setLaneY(){
+    const scoreBoxValue = (scoreBox.offsetTop + scoreBox.clientHeight)
+    const x =  (window.innerHeight - scoreBoxValue - 60)
+    const numberOfLanes = Math.floor(x/100)
+    const randomLane = Math.floor(Math.random() * numberOfLanes)
+    return (randomLane / numberOfLanes * x) + (scoreBoxValue)
+}
+
+function updateHearts() {
+    if(lives >= 0 && lives <= 5) {
+        const heart = document.getElementById(`heart${lives+1}`);
+        heart.style.visibility = 'hidden';
+    }
+}
+
+function userDied() {
+    const thing = document.getElementById('gameEndPopup').showModal()
+
+
 }
