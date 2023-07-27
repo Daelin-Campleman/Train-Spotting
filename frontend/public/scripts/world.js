@@ -34,7 +34,7 @@ function updateLives() {
 function onEntityClicked(entity){
     score = entity.modifyScoreOnClick(score)
     lives = entity.modifyLivesOnClick(lives)
-    if(lives <= 0) {
+    if(lives <= 4) {
         userDied()
     }
     updateScore()
@@ -79,9 +79,12 @@ function setLaneY(){
     const scoreBoxValue = (scoreBox.offsetTop + scoreBox.clientHeight)
     const x =  (window.innerHeight - scoreBoxValue - 60)
     const numberOfLanes = Math.floor(x/100)
-    console.log(numberOfLanes)
     const randomLane = Math.floor(Math.random() * numberOfLanes)
     return (randomLane / numberOfLanes * x) + (scoreBoxValue)
+}
+
+function setLaneForDestinations() {
+    
 }
 
 function updateHearts() {
@@ -93,5 +96,7 @@ function updateHearts() {
 
 function userDied() {
     const thing = document.getElementById('gameEndPopup').showModal()
+
+    fetch(`/saveScore?score=${score}`)
 
 }

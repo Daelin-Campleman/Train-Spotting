@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const passport = require("passport");
 const session = require("express-session");
@@ -98,6 +99,21 @@ app.get("/userInfo", isLoggedIn, (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
+});
+
+app.get("/saveScore", (req, res) => {
+  let email = req.user.email;
+  let score = req.query.score;
+  fetch(`${process.env.API_ENDPOINT}/score`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      score: score
+    })
+  })
 });
 
 const userRouter = require("./routes/user");
