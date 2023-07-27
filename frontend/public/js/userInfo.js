@@ -75,10 +75,22 @@ function getScores(){
 
     let highScores = document.getElementById("highScores");
 
+    let li = document.createElement("li");
+    let left = document.createElement("p");
+    let right = document.createElement("p");
+    left.classList.add("left", "heading");
+    right.classList.add("right", "heading");
+    left.textContent = "Date / Time";
+    right.textContent = "Score";
+    li.appendChild(left);
+    li.appendChild(right);
+        
+        highScores.appendChild(li);
+
     scores.forEach(score => {
-        let li = document.createElement("li");
-        let left = document.createElement("p");
-        let right = document.createElement("p");
+        li = document.createElement("li");
+        left = document.createElement("p");
+        right = document.createElement("p");
         left.classList.add("left");
         right.classList.add("right");
         left.textContent = score.timestamp;
@@ -93,3 +105,7 @@ function getScores(){
 function saveScore(email, score){
     fetch(`/saveScore?email=${email}&score=${score}`)
 }
+
+document.getElementById("home_logo").addEventListener("click", function(){
+    window.location.href = "/home";
+});
