@@ -4,23 +4,23 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/5138b10c49.js" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
 
 <body>
     <header>
         <nav>
-            <a class="active" href="#home">Home</a>
-            <a href="#highscore">Highscore</a>
-            <a href="#logout">Logout</a>
-            <a href="#about">About</a>
+            <li><a class="active" href="home">Home</a></li>
+            <li><a href="highscore">Highscore</a></li>
+            <li><a href="logout">Logout</a></li>
+            <li><a onclick="gameEndPopup.showModal()">About</a></li>
         </nav>
     </header>
     <aside id="scoreBox">
         <h1 id="highScore">Highscore: 0</h1>
-        <h1 id="userLives">Lives: 5</h1>
+        <h1 id="userLives">Lives: <span> </span></h1>
         <div class="scoreboard">
-            <!-- Initially, display 5 hearts -->
             <div class="heart" id="heart1"></div>
             <div class="heart" id="heart2"></div>
             <div class="heart" id="heart3"></div>
@@ -30,9 +30,22 @@
     </aside>
 
     <section class="gameArea">
+        <dialog id="gameEndPopup">
+            <button onClick="gameEndPopup.close()"><i class="fa-regular fa-circle-xmark"></i></button>
+            <h2>You died!</h2>
+        </dialog>
+    
     </section>
 
     <style>
+        header {
+            background-color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+}
         html,
         body {
             overflow: hidden;
@@ -52,14 +65,38 @@
             outline: none;
             cursor: pointer;
         }
+        header {
+            background-color: #f2f2f2;
+            padding: 10px;
+            position: relative; /* Add this */
+            z-index: 1; /* Add this */
+        }
+        header * {
+            display: inline;
+        }
+
+        header li {
+            margin: 20px;
+        }
+
+        header li a {
+            color: black;
+            text-decoration: none;
+        }
 
         aside {
             float: right;
             width: 30%;
-            /* margin: 20px; */
             border: 1px solid #ccc;
             padding: 10px;
+            position: absolute; /* Add this */
+            right: 0; /* Add this */
+            top: 0; /* Add this */
+            z-index: 2; /* Add this */
         }
+        .scoreboard {
+            display: inline-block; /* Add this */
+    }
 
         .heart {
             width: 30px;
@@ -67,6 +104,14 @@
             background-image: url('/static/images/heartIcon.png');
             background-size: cover;
             display: inline-block;
+        }
+        .gamePlayPopup {
+            background-color: red;
+            text-align: center;
+            max-width: 600px; /* Adjust this value as per your design requirements */
+            padding: 20px;
+            border: 1px solid #ccc;
+            visibility: hidden;
         }
     </style>
     <script src="/static/scripts/abstract-vehicle.js"></script>

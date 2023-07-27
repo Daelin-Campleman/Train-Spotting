@@ -3,6 +3,7 @@ class TruckFactory extends AbstractVehicleFactory  {
         const element = this.createElement()
         document.body.appendChild(element)
         element.style.display = 'none'
+        element.style.class = 'truck'
         const vehicle = new Truck(element)
         vehicle.setY(setLaneY())
         vehicle.setOnClickListener(onEntityClicked)
