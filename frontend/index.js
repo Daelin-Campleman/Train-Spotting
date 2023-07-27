@@ -27,7 +27,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.sendStatus(401);
+    res.redirect("/login");
   }
 };
 
@@ -55,18 +55,18 @@ app.get(
     failureRedirect: "/failed",
   }),
   function (req, res) {
-    res.redirect("/success");
+    res.redirect("/home");
   }
 );
 
 // failed route if the authentication fails
 app.get("/failed", (req, res) => {
   console.log("User is not authenticated");
-  res.send("Failed");
+  res.redirect("/login?error=Login%20failed!%20Please%20try%20again");
 });
 
 // Success route if the authentication is successful
-app.get("/success", isLoggedIn, (req, res) => {
+app.get("/home", isLoggedIn, (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 

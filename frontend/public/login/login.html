@@ -73,6 +73,7 @@
 
     <main>
       <section class="box">
+        <p id="error" class="alert danger hidden"></p>
         <h1 class="title">Log in | Register</h1>
         <button class="login-button" type="button">
           <a href="/google"
@@ -98,6 +99,17 @@
           document.getElementsByTagName("html")[0].classList.remove("dark");
         }
       });
+
+      // query params
+      const params = new URLSearchParams(window.location.search);
+      
+      // error param
+      const error = params.get("error");
+
+      if(error != null && error != ""){
+        document.getElementById("error").textContent = error;
+        document.getElementById("error").classList.remove("hidden");
+      }
     </script>
   </body>
 </html>
