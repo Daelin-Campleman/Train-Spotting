@@ -108,6 +108,7 @@ main {
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: 0.1em;
+  text-align: center;
 }
 
 .box .subtitle {
@@ -140,17 +141,18 @@ main {
   border-radius: 4px;
   inset: none;
   cursor: pointer;
+  font-style: normal;
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
 }
 
 .login-button:hover {
   background-color: #ea4335;
 }
 
-.login-button a {
-  font-style: normal;
-  text-decoration: none;
-  color: white;
-  font-size: 1rem;
+.fa-google {
+  margin-right: 1em;
 }
 
 a.btn {
@@ -179,6 +181,12 @@ a.btn:hover {
   gap: 1em;
 
   margin-top: 1em;
+  width: 100%;
+}
+
+.btns.nav {
+  justify-content: start;
+  align-items: start;
 }
 
 footer {
