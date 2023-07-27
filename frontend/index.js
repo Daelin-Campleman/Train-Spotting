@@ -124,7 +124,7 @@ app.get("/saveScore", (req, res) => {
       score: score
     })
   })
-})
+});
 
 const userRouter = require("./routes/user");
 const landingRouter = require("./routes/landing");
