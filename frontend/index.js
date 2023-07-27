@@ -51,6 +51,17 @@ app.get(
     failureRedirect: "/failed",
   }),
   function (req, res) {
+    let email = req.user.email;
+
+    // post request to /user
+    fetch(`${process.env.API_ENDPOINT}/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: email,
+    })
+
     res.redirect("/home");
   }
 );
@@ -99,6 +110,21 @@ app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
+
+app.get("/saveScore", (req, res) => {
+  let email = req.query.email;
+  let score = req.query.score;
+  fetch(`${process.env.API_ENDPOINT}/score`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      score: score
+    })
+  })
+})
 
 const userRouter = require("./routes/user");
 const landingRouter = require("./routes/landing");
