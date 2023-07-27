@@ -20,11 +20,15 @@ function updateScore() {
     if(score >= 3) {
         levelUpGameLogic()
     }
+    if(score >= 7) {
+        levelDownGameLogic()
+    }
 }
 
 function updateLives() {
     userLivesDisplay.innerText = "Lives: " + lives;
     updateHearts()
+
 }
 
 function onEntityClicked(entity){
@@ -54,6 +58,12 @@ function levelUpGameLogic() {
     }
 }
 
+function levelDownGameLogic() {
+    for (let i = 0; i < vehicleArray.length; i++){
+        vehicleArray[i].levelDown()
+    }
+}
+
 const showNextEntity = async () => {
     vehicleArray[Math.floor(getRandomValue(0, vehicleArray.length))].show()
 }
@@ -71,8 +81,14 @@ function setLaneY(){
 }
 
 function updateHearts() {
-    if(lives >= 0 && lives < 5) {
+    if(lives >= 0 && lives <= 5) {
         const heart = document.getElementById(`heart${lives+1}`);
         heart.style.visibility = 'hidden';
     }
+}
+
+function userDied() {
+    const thing = document.getElementById('gameEndPopup').showModal()
+
+
 }
