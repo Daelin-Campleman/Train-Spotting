@@ -112,7 +112,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/saveScore", (req, res) => {
-  let email = req.query.email;
+  let email = req.user.email;
   let score = req.query.score;
   fetch(`${process.env.API_ENDPOINT}/score`, {
     method: "POST",
