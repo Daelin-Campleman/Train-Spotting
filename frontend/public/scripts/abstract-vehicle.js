@@ -1,13 +1,13 @@
 class AbstractVehicle {
 
     element
-    speed = 0.1
+    speed = 0.3
+    static maxSpeed = 0.3
     isHidden = true
     onExpire = {}
 
     constructor(element) {
         this.element = element
-        this.speed = this.#getRandomValue(0.1, 0.3)
     }
 
     hide() {
@@ -18,25 +18,23 @@ class AbstractVehicle {
     show() {
         this.element.style.display = "block"
         this.isHidden = false
+        this.speed = this.getSpeed()
+        let scaleResult = (this.speed/AbstractVehicle.maxSpeed) 
+        let sizingResult = (1.1-0.4)*scaleResult + 0.4
+        let result = "scale(" +sizingResult.toString() + ")"
+        this.element.style.transform = result
     }
 
     draw(progress) {
-        if(this.isHidden) {
-            return
-        }
-        
-        this.element.style.left = (this.element.offsetLeft+this.speed*progress)+"px"
+        throw "Abstract method called. Should not be called lol"
 
-        if (this.element.offsetLeft > window.innerWidth) {
-            this.onExpire(this)
-        }
     }
 
     reset() {
-        this.element.style.left = (-this.element.clientWidth)+"px"
+        throw "Abstract method called. Should not be called lol"
+
     }
     
-// need to make this do it in lanes?
     setY(y) {
         this.element.style.top = y+"px"
     }
@@ -51,12 +49,12 @@ class AbstractVehicle {
         this.onExpire = onExpire
     }
 
-    #getRandomValue(min, max) {
+    getRandomValue(min, max) {
         return (Math.random() * (max - min)) + min
     }
 
-    getRandomDirection() {
-        return 
+    getSpeed() {
+        return (this.element.offsetTop/window.innerHeight * AbstractVehicle.maxSpeed)
     }
 
     levelUp(){
