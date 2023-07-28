@@ -33,8 +33,20 @@ function updateLives() {
 }
 
 function onEntityClicked(entity){
+
+    if(score >= 3) {
+        score = entity.modifyLevelUpScoreOnClick(score)
+        lives = entity.modifyLivesOnClick(lives)
+    } else {
     score = entity.modifyScoreOnClick(score)
     lives = entity.modifyLivesOnClick(lives)
+    }
+    if(score >= 7) {
+        levelDownGameLogic()
+        score = entity.modifyScoreOnClick(score)
+        lives = entity.modifyLivesOnClick(lives)
+    }
+
     if(lives <= 0) {
         userDied()
     }

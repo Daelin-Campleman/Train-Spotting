@@ -29,6 +29,10 @@ class Train extends AbstractVehicle {
         return score+1
     }
 
+    modifyLevelUpScoreOnClick(score){
+        return score+2
+    }
+
     modifyLivesOnClick(lives){
         return lives
     }

@@ -28,6 +28,9 @@ class Truck extends AbstractVehicle {
     modifyScoreOnClick(score){
         return score
     }
+    modifyLevelUpScoreOnClick(score){
+        return score
+    }
 
     modifyLivesOnClick(lives){
         return lives-1

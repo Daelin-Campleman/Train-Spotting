@@ -19,6 +19,10 @@ class Landmark extends AbstractVehicle {
         this.speed = this.getSpeed()
     }
 
+    modifyLevelUpScoreOnClick(score){
+        return score
+    }
+
 
 
 }
