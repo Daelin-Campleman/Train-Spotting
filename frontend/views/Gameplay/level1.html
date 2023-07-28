@@ -9,17 +9,12 @@
 </head>
 
 <body>
-    <header>
+    <header id="scoreBox">
         <nav>
-            <li><a class="active" href="home">Home</a></li>
-            <li><a href="highscore">Highscore</a></li>
-            <li><a href="logout">Logout</a></li>
-            <li><a onclick="gameEndPopup.showModal()">About</a></li>
+            <a class="modalButton" href="home"> <i class="fa-solid fa-house"></i> Home</a>
         </nav>
-    </header>
-    <aside id="scoreBox">
-        <h1 id="highScore">Highscore: 0</h1>
-        <h1 id="userLives">Lives: <span> </span></h1>
+        <div class="boxxy">
+        <h3 id="userLives">Lives: <span> </span></h3>
         <div class="scoreboard">
             <div class="heart" id="heart1"></div>
             <div class="heart" id="heart2"></div>
@@ -27,27 +22,26 @@
             <div class="heart" id="heart4"></div>
             <div class="heart" id="heart5"></div>
         </div>
-    </aside>
+    </div>
+        <h3 id="highScore">Highscore: 0</h3>
+
+        
+    </header>
 
     <section class="gameArea">
-        <dialog id="gameEndPopup">
-            <button onClick="gameEndPopup.close()"><i class="fa-regular fa-circle-xmark"></i></button>
-            <h2>You died!</h2>
+        <dialog class="modalBox" id="gameEndPopup">
+            <h2>You died!</h2><br>
+            <a class="modalButton" href="game">Retry</a>
+            <a class="modalButton" href="home">Home</a>
+            <a class="modalButton" href="scores">Scores</a>
         </dialog>
-    
+
     </section>
 
     <style>
-        header {
-            background-color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-}
         html,
         body {
+            background-color: #E8FFCE;
             overflow: hidden;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -65,23 +59,20 @@
             outline: none;
             cursor: pointer;
         }
+
         header {
-            background-color: #f2f2f2;
+            background-color: rgb(73, 87, 30);
             padding: 10px;
-            position: relative; /* Add this */
-            z-index: 1; /* Add this */
-        }
-        header * {
-            display: inline;
+            position: relative;
+            z-index: 1;
+            height: 60px
         }
 
-        header li {
-            margin: 20px;
-        }
-
-        header li a {
-            color: black;
-            text-decoration: none;
+        header  {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
         }
 
         aside {
@@ -89,14 +80,23 @@
             width: 30%;
             border: 1px solid #ccc;
             padding: 10px;
-            position: absolute; /* Add this */
-            right: 0; /* Add this */
-            top: 0; /* Add this */
-            z-index: 2; /* Add this */
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 2;
         }
-        .scoreboard {
-            display: inline-block; /* Add this */
-    }
+        h3 {
+            color: black
+
+        }
+
+        .scoreboard, .boxxy {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding-top: 5px;
+        }
 
         .heart {
             width: 30px;
@@ -105,21 +105,43 @@
             background-size: cover;
             display: inline-block;
         }
-        .gamePlayPopup {
-            background-color: red;
-            text-align: center;
-            max-width: 600px; /* Adjust this value as per your design requirements */
-            padding: 20px;
-            border: 1px solid #ccc;
-            visibility: hidden;
+
+        .modalBox {
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.074);
+            border: 1px solid rgba(255, 255, 255, 0.222);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 0.7rem;
+            transform: translateY(0px);
+        }
+
+        .modalButton {
+            color: rgb(58, 183, 58);
+            padding: 1em;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.222);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 0.7rem;
+            text-decoration: none;
+            box-shadow: 0 0 2px green;
+            transition: 0.3s;
+        }
+
+        .modalButton:hover {
+            color: rgb(39, 247, 39);
+            box-shadow: 0 0 10px rgb(39, 247, 39);
         }
     </style>
     <script src="/static/scripts/abstract-vehicle.js"></script>
     <script src="/static/scripts/train.js"></script>
     <script src="/static/scripts/truck.js"></script>
+    <script src="/static/scripts/landmark.js"></script>
     <script src="/static/scripts/abstract-vehicle-factory.js"></script>
     <script src="/static/scripts/train-factory.js"></script>
     <script src="/static/scripts/truck-factory.js"></script>
+    <script src="/static/scripts/landmark-factory.js"></script>
     <script src="/static/scripts/world.js"></script>
     <script src="/static/scripts/game-engine.js"></script>
 </body>

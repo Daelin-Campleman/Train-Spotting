@@ -1,9 +1,16 @@
+let userInfo;
+
 (async () => {
-    let response = await fetch("/userInfo");
-    let data = await response.json();
+    try {
+        let response = await fetch("/userInfo");
+        userInfo = await response.json();
+
+        document.getElementById("userName").textContent = userInfo.name;
+        document.getElementById("userPicture").src = userInfo.image;
+    } catch (err) {
+        console.log(err);
+    }
     
-    document.getElementById("userName").textContent = data.name;
-    document.getElementById("userPicture").src = data.image;
 })()
 
 document.getElementById("theme").addEventListener("click", function(e){
@@ -28,3 +35,77 @@ if (localStorage.getItem("theme") != null && localStorage.getItem("theme") == "d
 } else if(localStorage.getItem("theme") == null){
     localStorage.setItem("theme", "light");
 }
+
+// function getScores(){
+//     fetch(`${process.env.API_ENDPOINT}/scores?email=${userInfo.email}`, {
+//         method: "GET",
+//         headers: {
+//             "Content-Type": "application/json"
+//         }
+//     })
+//     .then((response) => response.json())
+//     .then((data) => {
+//         console.log(data);
+
+//         let highScores = document.getElementById("highScores");
+
+//         data.scores.forEach(score => {
+//             let li = document.createElement("li");
+//             li.textContent = score;
+//             highScores.appendChild(li);
+//         });
+//     });
+// }
+
+function getScores(){
+    let scores = [
+        {
+            timestamp: new Date(),
+            score: 23
+        },
+        {
+            timestamp: new Date(),
+            score: 12
+        },
+        {
+            timestamp: new Date(),
+            score: 7
+        },
+    ];
+
+    let highScores = document.getElementById("highScores");
+
+    let li = document.createElement("li");
+    let left = document.createElement("p");
+    let right = document.createElement("p");
+    left.classList.add("left", "heading");
+    right.classList.add("right", "heading");
+    left.textContent = "Date / Time";
+    right.textContent = "Score";
+    li.appendChild(left);
+    li.appendChild(right);
+        
+        highScores.appendChild(li);
+
+    scores.forEach(score => {
+        li = document.createElement("li");
+        left = document.createElement("p");
+        right = document.createElement("p");
+        left.classList.add("left");
+        right.classList.add("right");
+        left.textContent = score.timestamp;
+        right.textContent = score.score;
+        li.appendChild(left);
+        li.appendChild(right);
+        
+        highScores.appendChild(li);
+    });
+}
+
+function saveScore(email, score){
+    fetch(`/saveScore?email=${email}&score=${score}`)
+}
+
+document.getElementById("home_logo").addEventListener("click", function(){
+    window.location.href = "/home";
+});
