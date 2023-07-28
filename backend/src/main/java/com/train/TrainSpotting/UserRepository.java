@@ -35,8 +35,11 @@ public class UserRepository {
 
     private Connection getConnection() throws SQLException {
         String url = properties.getProperty("db.url");
+        String username = properties.getProperty("db.usename");
+        String password = properties.getProperty("db.password");
 
-        return DriverManager.getConnection(url);
+
+        return DriverManager.getConnection(url,username,password);
     }
 
 
