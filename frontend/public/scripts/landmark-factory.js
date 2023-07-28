@@ -1,19 +1,19 @@
-class TrainFactory extends AbstractVehicleFactory {
+class LandmarkFactory extends AbstractVehicleFactory {
 
     createVehicle(onEntityClicked, onExpire, yPosition) {
         return this.createSpecificVehicle(yPosition, onEntityClicked, onExpire)
     }
 
     newInstance(element){
-        return new Train(element)
+        return new Landmark(element)
     }
 
-    getImgUrl(){
-        return '/static/images/level1Train.png'
+    getImgUrl(){ 
+        return this.getSpecificImgUrl() 
     }
 
     getClass(){
-        return 'train'
+        return 'landmark' 
     }
 
 }

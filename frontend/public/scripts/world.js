@@ -1,4 +1,5 @@
 const vehicleArray = []
+const landmarkArray = []
 
 const highScoreDisplay = document.getElementById("highScore");
 const userLivesDisplay = document.getElementById("userLives");
@@ -6,9 +7,11 @@ const scoreBox = document.getElementById("scoreBox");
 
 const trainFactory = new TrainFactory()
 const truckFactory = new TruckFactory()
+const landmarkFactory = new LandmarkFactory()
 
 setupEntities(trainFactory, 5)
 setupEntities(truckFactory, 5)
+setupLandmarks(landmarkFactory, 11)
 
 let score = 0;
 let lives = 5;
@@ -26,15 +29,13 @@ function updateScore() {
 }
 
 function updateLives() {
-    userLivesDisplay.innerText = "Lives: " + lives;
     updateHearts()
-
 }
 
 function onEntityClicked(entity){
     score = entity.modifyScoreOnClick(score)
     lives = entity.modifyLivesOnClick(lives)
-    if(lives <= 4) {
+    if(lives <= 0) {
         userDied()
     }
     updateScore()
@@ -44,14 +45,26 @@ function onEntityClicked(entity){
 
 function resetEntity(entity) {
     entity.hide()
-    entity.reset()
     entity.setY(setLaneY())
+    entity.reset()
+}
+
+function resetLandmark(entity) {
+    entity.hide()
+    entity.setY(setLaneForDestinations())
+    entity.reset()
 }
 
 function setupEntities(factory, numVehicles) {
     for (let i = 0; i < numVehicles; i++){
-        vehicleArray.push(factory.createVehicle(onEntityClicked, resetEntity))
+        vehicleArray.push(factory.createVehicle(onEntityClicked, resetLandmark, setLaneY()))
     }
+}
+
+function setupLandmarks(factory, numLandmarks) {
+    for (let i = 0; i < numLandmarks; i++){
+        landmarkArray.push(factory.createVehicle(onEntityClicked, resetEntity, setLaneForDestinations()))
+    }   
 }
 
 // TODO: Replace with Broadcaster pattern
@@ -67,15 +80,19 @@ function levelDownGameLogic() {
     }
 }
 
-const showNextEntity = async () => {
+const showNextVehicle = () => {
     vehicleArray[Math.floor(getRandomValue(0, vehicleArray.length))].show()
+}
+
+const showNextLandmark = () => {
+    landmarkArray[Math.floor(getRandomValue(0, landmarkArray.length))].show()
 }
 
 function getRandomValue(min, max) {
     return (Math.random() * (max - min)) + min
 }
 
-function setLaneY(){
+function setLaneY() {
     const scoreBoxValue = (scoreBox.offsetTop + scoreBox.clientHeight)
     const x =  (window.innerHeight - scoreBoxValue - 60)
     const numberOfLanes = Math.floor(x/100)
@@ -84,7 +101,8 @@ function setLaneY(){
 }
 
 function setLaneForDestinations() {
-    
+    const usedLane = setLaneY()
+    return (usedLane + 60)
 }
 
 function updateHearts() {
@@ -96,7 +114,6 @@ function updateHearts() {
 
 function userDied() {
     const thing = document.getElementById('gameEndPopup').showModal()
-
+    // double checky this 
     fetch(`/saveScore?score=${score}`)
-
 }

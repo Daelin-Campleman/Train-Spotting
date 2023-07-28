@@ -1,17 +1,18 @@
 class TruckFactory extends AbstractVehicleFactory  {
-    createVehicle(onEntityClicked, resetEntity) {
-        const element = this.createElement()
-        document.body.appendChild(element)
-        element.style.display = 'none'
-        element.style.class = 'truck'
-        const vehicle = new Truck(element)
-        vehicle.setY(setLaneY())
-        vehicle.setOnClickListener(onEntityClicked)
-        vehicle.setOnExpiredListener(resetEntity)
-        return vehicle
+
+    createVehicle(onEntityClicked, onExpire, yPosition) {
+        return this.createSpecificVehicle(yPosition, onEntityClicked, onExpire)
+    }
+
+    newInstance(element){
+        return new Truck(element)
     }
 
     getImgUrl(){
         return '/static/images/level1Truck1.png'
+    }
+
+    getClass(){
+        return 'truck'
     }
 }

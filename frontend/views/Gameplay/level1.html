@@ -9,17 +9,12 @@
 </head>
 
 <body>
-    <header>
+    <header id="scoreBox">
         <nav>
-            <li><a class="active" href="home">Home</a></li>
-            <li><a href="scores">Highscore</a></li>
-            <li><a href="logout">Logout</a></li>
-            <li><a onclick="gameEndPopup.showModal()">About</a></li>
+            <a class="modalButton" href="home"> <i class="fa-solid fa-house"></i> Home</a>
         </nav>
-    </header>
-    <aside id="scoreBox">
-        <h1 id="highScore">Highscore: 0</h1>
-        <h1 id="userLives">Lives: <span> </span></h1>
+        <div class="boxxy">
+        <h3 id="userLives">Lives: <span> </span></h3>
         <div class="scoreboard">
             <div class="heart" id="heart1"></div>
             <div class="heart" id="heart2"></div>
@@ -27,12 +22,16 @@
             <div class="heart" id="heart4"></div>
             <div class="heart" id="heart5"></div>
         </div>
-    </aside>
+    </div>
+        <h3 id="highScore">Highscore: 0</h3>
+
+        
+    </header>
 
     <section class="gameArea">
         <dialog class="modalBox" id="gameEndPopup">
-            <button onClick="gameEndPopup.close()"><i class="fa-regular fa-circle-xmark"></i></button>
-            <h2>You died!</h2>
+            <h2>You died!</h2><br>
+            <a class="modalButton" href="game">Retry</a>
             <a class="modalButton" href="home">Home</a>
             <a class="modalButton" href="scores">Scores</a>
         </dialog>
@@ -40,15 +39,6 @@
     </section>
 
     <style>
-        header {
-            background-color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-        }
-
         html,
         body {
             overflow: hidden;
@@ -70,23 +60,18 @@
         }
 
         header {
-            background-color: #f2f2f2;
+            background-color: rgb(73, 87, 30);
             padding: 10px;
             position: relative;
             z-index: 1;
+            height: 60px
         }
 
-        header * {
-            display: inline;
-        }
-
-        header li {
-            margin: 20px;
-        }
-
-        header li a {
-            color: black;
-            text-decoration: none;
+        header  {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
         }
 
         aside {
@@ -99,9 +84,17 @@
             top: 0;
             z-index: 2;
         }
+        h3 {
+            color: black
 
-        .scoreboard {
-            display: inline-block;
+        }
+
+        .scoreboard, .boxxy {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding-top: 5px;
         }
 
         .heart {
@@ -143,9 +136,11 @@
     <script src="/static/scripts/abstract-vehicle.js"></script>
     <script src="/static/scripts/train.js"></script>
     <script src="/static/scripts/truck.js"></script>
+    <script src="/static/scripts/landmark.js"></script>
     <script src="/static/scripts/abstract-vehicle-factory.js"></script>
     <script src="/static/scripts/train-factory.js"></script>
     <script src="/static/scripts/truck-factory.js"></script>
+    <script src="/static/scripts/landmark-factory.js"></script>
     <script src="/static/scripts/world.js"></script>
     <script src="/static/scripts/game-engine.js"></script>
 </body>
